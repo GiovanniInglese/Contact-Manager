@@ -35,5 +35,9 @@ def is_valid_email(email):
 
     if not domain_name or not extension:
         return False
+    
+    #spaces are not allowed in email
+    if " " in email:
+        return False    
 
     return True

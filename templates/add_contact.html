@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Contact</title>
+    <title>New Intake Record</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Add Contact</h1>
+    <div class="form-card">
+        <h1>New Intake Record</h1>
 
-    {% if error %}
-        <p style="color: red; font-weight: bold;">{{ error }}</p>
-    {% endif %}
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
 
-   <form method="POST">
-    <label>Name:</label><br>
-    <input type="text" name="name" value="{{ name }}"><br><br>
+        <form method="POST">
+            <label for="name">Client Name</label>
+            <input type="text" id="name" name="name" value="{{ name }}">
 
-    <label>Phone:</label><br>
-    <input type="text" name="phone" value="{{ phone }}"><br><br>
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" value="{{ phone }}">
 
-    <label>Email:</label><br>
-    <input type="text" name="email" value="{{ email }}"><br><br>
+            <label for="email">Email Address</label>
+            <input type="text" id="email" name="email" value="{{ email }}">
 
-    <button type="submit">Add Contact</button>
-</form>
+            <button type="submit">Save Intake Record</button>
+        </form>
 
-    <br>
-    <a href="{{ url_for('index') }}">Back to Contact List</a>
+        <a href="{{ url_for('index') }}" class="back-link">← Back to Dashboard</a>
+    </div>
 </body>
 </html>

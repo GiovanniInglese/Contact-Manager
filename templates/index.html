@@ -3,42 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Manager</title>
+    <title>Client Intake Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Contact Manager</h1>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Client Intake Dashboard</h1>
+                <p class="subtitle">Manage intake records for your organization</p>
+            </div>
+        </div>
 
-    <p><a href="{{ url_for('add_contact') }}">Add New Contact</a></p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Records</div>
+                <div class="stat-value">{{ total_records }}</div>
+                <div class="stat-subtext">All intake records in the system</div>
+            </div>
 
-    {% if contacts %}
-        <table border="1" cellpadding="8">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-            {% for contact in contacts %}
-            <tr>
-                <td>{{ contact[0] }}</td>
-                <td>{{ contact[1] }}</td>
-                <td>{{ contact[2] }}</td>
-                <td>{{ contact[3] }}</td>
-                <td>
-                    <a href="{{ url_for('edit_contact', contact_id=contact[0]) }}">Edit</a>
+            <div class="stat-card">
+                <div class="stat-label">Displayed Records</div>
+                <div class="stat-value">{{ displayed_records }}</div>
+                <div class="stat-subtext">
+                    {% if search_term %}
+                        Filtered by search: "{{ search_term }}"
+                    {% else %}
+                        Currently visible on dashboard
+                    {% endif %}
+                </div>
+            </div>
 
-                    <form action="{{ url_for('delete_contact', contact_id=contact[0]) }}" method="POST" style="display:inline;">
-    <button type="submit" onclick="return confirm('Are you sure you want to delete this contact?');">
-        Delete
-    </button>
-</form>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No contacts found.</p>
-    {% endif %}
+            <div class="stat-card">
+                <div class="stat-label">System Status</div>
+                <div class="stat-value">Active</div>
+                <div class="stat-subtext">Intake portal is running normally</div>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <a href="{{ url_for('add_contact') }}" class="button">+ Add New Intake Record</a>
+
+            <form method="GET" action="{{ url_for('index') }}" class="search-form">
+                <input type="text" name="search" placeholder="Search by name or phone" value="{{ search_term }}">
+                <button type="submit">Search</button>
+                <a href="{{ url_for('index') }}" class="button button-secondary">Clear</a>
+            </form>
+        </div>
+
+        {% if contacts %}
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact[0] }}</td>
+                        <td>{{ contact[1] }}</td>
+                        <td>{{ contact[2] }}</td>
+                        <td>{{ contact[3] }}</td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ url_for('edit_contact', contact_id=contact[0]) }}" class="button">Edit</a>
+
+                                <form action="{{ url_for('delete_contact', contact_id=contact[0]) }}" method="POST" class="inline-form">
+                                    <button type="submit" class="button button-danger"
+                                        onclick="return confirm('Are you sure you want to delete this intake record?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                No intake records found.
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>

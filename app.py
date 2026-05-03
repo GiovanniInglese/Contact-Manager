@@ -7,8 +7,21 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    contacts = get_all_contacts()
-    return render_template("index.html", contacts=contacts)
+    search_term = request.args.get("search", "").strip()
+
+    all_contacts = get_all_contacts()
+
+    if search_term:
+        contacts = search_contacts_db(search_term)
+    else:
+        contacts = get_all_contacts()
+
+    total_records = len(all_contacts)
+    displayed_records = len(contacts)
+
+    return render_template("index.html", contacts=contacts, search_term=search_term, total_records = total_records, displayed_records = displayed_records)
+
+
 
 
 @app.route("/add", methods=["GET", "POST"])
@@ -88,6 +101,7 @@ def edit_contact(contact_id):
         email=current_email,
         error=error
     )
+
 
 
 
